@@ -1,6 +1,6 @@
 <?php 
 
-namespace Kernel;
+namespace Kernel\Debugger;
 
 class Debug
 {

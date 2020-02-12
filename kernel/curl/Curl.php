@@ -15,9 +15,16 @@ class Curl
     protected static $options;
 
     /**
-     * @var array
+     * @var \stdClass
      */ 
     protected static $result;
+
+    /**
+     * Not converted to array data
+     * 
+     * @var string
+     */ 
+    protected static $jsonData;
 
     public function __construct(string $url, array $options)
     {
@@ -46,8 +53,10 @@ class Curl
     {
         self::options();
 
-        self::$result = Executor::exec();
+        self::$jsonData = Executor::exec();
+        ConnectionDestroyer::destroy();
 
-        return json_decode(self::$result);
+        self::$result = json_decode(self::$jsonData);
+        return array_pop(self::$result->result);
     }
 }

@@ -4,7 +4,7 @@ namespace Kernel\Commands;
 
 use Kernel\ConnectionSetter;
 
-class StartCommandHandler extends ConnectionSetter
+class HelpCommandHandler extends ConnectionSetter
 {
     public function __construct(string $url, array $options)
     {

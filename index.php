@@ -2,12 +2,20 @@
 
 require_once './vendor/autoload.php';
 
-use Kernel\ConnectionSetter;
+use Kernel\GetUpdates;
+use Kernel\Debugger\Debug;
+use Kernel\Commands\StartCommandHandler;
+use Kernel\Commands\HelpCommandHandler;
 
-$settings = require_once './config/settings.php';
-$getUpdatesLink = 'https://api.telegram.org/bot' . $settings['token'] . '/getUpdates';
+$updates = new GetUpdates();
+$content = $updates::getContent();
 
-$c = new ConnectionSetter($getUpdatesLink, [
+$settings = require './config/settings.php';
+$commands = require './config/commands_list.php';
+
+$message = $content->message->text;
+$chat_id = $content->message->chat->id;
+$defaultServerOptions = [
     [
         'option' => CURLOPT_RETURNTRANSFER,
         'value' => true
@@ -24,8 +32,33 @@ $c = new ConnectionSetter($getUpdatesLink, [
         'option' => CURLOPT_PROXYTYPE,
         'value' => CURLPROXY_SOCKS4
     ]
-]);
+];
 
-$a = $c::getContent();
+switch($message) {
+    case '/start': 
 
-var_dump($a);
+        $message = 'Hello boy))';
+        $link = 'https://api.telegram.org/bot' . $settings['token'] . '/sendMessage?chat_id=' . $chat_id . '&text='. $message; 
+        
+        $start = new StartCommandHandler($link, $defaultServerOptions);
+    
+        $displayingMessage = $start::getContent();
+        return $displayingMessage;
+        
+    break;
+
+    case '/help' || in_array($message, $commands) == false:
+    
+        $message = "Available commands: " . implode(', ', $commands);
+        $link = 'https://api.telegram.org/bot' . $settings['token'] . '/sendMessage?chat_id=' . $chat_id . '&text='. $message;
+
+        $help = new HelpCommandHandler($link, $defaultServerOptions);
+
+        $displayingMessage = $help->getContent();
+        return $displayingMessage;
+
+    default:
+        
+    break;
+}
+    
