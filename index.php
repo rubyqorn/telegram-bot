@@ -12,9 +12,18 @@ $content = $updates::getContent();
 
 $settings = require './config/settings.php';
 $commands = require './config/commands_list.php';
+require_once './config/keyboards.php';
 
 $message = $content->message->text;
 $chat_id = $content->message->chat->id;
+$firstname = $content->message->from->first_name;
+$options = [
+    'chat_id' => $chat_id,
+    'message' => '/start',
+    'reply_markup' => json_encode($startKeyboard)
+];
+
+
 $defaultServerOptions = [
     [
         'option' => CURLOPT_RETURNTRANSFER,
@@ -31,13 +40,18 @@ $defaultServerOptions = [
     [
         'option' => CURLOPT_PROXYTYPE,
         'value' => CURLPROXY_SOCKS4
+    ],
+    [
+        'option' => CURLOPT_POSTFIELDS,
+        'value' => $options
     ]
 ];
 
 switch($message) {
     case '/start': 
 
-        $message = 'Hello boy))';
+        $keyboard = json_encode($startKeyboard, true);
+        $message = "Hello {$firstname}";
         $link = 'https://api.telegram.org/bot' . $settings['token'] . '/sendMessage?chat_id=' . $chat_id . '&text='. $message; 
         
         $start = new StartCommandHandler($link, $defaultServerOptions);
@@ -56,9 +70,22 @@ switch($message) {
 
         $displayingMessage = $help->getContent();
         return $displayingMessage;
+    break;
+
+    case 'Article':
+
+    break;
+
+    case 'News':
+
+    break;
+
+    case 'Meme': 
+
+    break;
 
     default:
-        
+        //
     break;
 }
     

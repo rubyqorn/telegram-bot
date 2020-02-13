@@ -59,4 +59,17 @@ class Curl
         self::$result = json_decode(self::$jsonData);
         return array_pop(self::$result->result);
     }
+
+    /**
+     * Get content from resource
+     * 
+     * @return array
+     */ 
+    public static function getContentForParsing()
+    {
+        self::options();
+
+        self::$result = Executor::exec();
+        return self::$result;
+    }
 }

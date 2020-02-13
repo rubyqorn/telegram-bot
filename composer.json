@@ -14,5 +14,7 @@
             "Kernel\\": "kernel/"
         }
     },
-    "require": {}
+    "require": {
+        "coderockr/php-query": "@dev"
+    }
 }
