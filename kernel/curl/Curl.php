@@ -70,6 +70,19 @@ class Curl
         self::options();
 
         self::$result = Executor::exec();
+        ConnectionDestroyer::destroy();
+
         return self::$result;
+    }
+
+    /**
+     * Execute cURL resource
+     * 
+     * @return array
+     */ 
+    public static function push()
+    {
+        self::options();
+        return Executor::exec();
     }
 }

@@ -1,5 +1,5 @@
 <?php 
 
 return [
-    '/help', '/start'
+    '/help', '/start', 'Article', 'News', 'Meme'
 ];

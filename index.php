@@ -6,6 +6,9 @@ use Kernel\GetUpdates;
 use Kernel\Debugger\Debug;
 use Kernel\Commands\StartCommandHandler;
 use Kernel\Commands\HelpCommandHandler;
+use Kernel\Commands\ArticleCommandHandler;
+use Kernel\Commands\NewsCommandHandler;
+use Kernel\Commands\MemeCommandHandler;
 
 $updates = new GetUpdates();
 $content = $updates::getContent();
@@ -61,7 +64,7 @@ switch($message) {
         
     break;
 
-    case '/help' || in_array($message, $commands) == false:
+    case '/help':
     
         $message = "Available commands: " . implode(', ', $commands);
         $link = 'https://api.telegram.org/bot' . $settings['token'] . '/sendMessage?chat_id=' . $chat_id . '&text='. $message;
@@ -74,13 +77,22 @@ switch($message) {
 
     case 'Article':
 
+        $article = new ArticleCommandHandler($defaultServerOptions, $chat_id);
+        return $article::push();
+
     break;
 
     case 'News':
+        
+        $news = new NewsCommandHandler($defaultServerOptions, $chat_id);
+        return $news::getContent();
 
     break;
 
     case 'Meme': 
+
+        $meme = new MemeCommandHandler($defaultServerOptions, $chat_id);
+        return $meme::push();
 
     break;
 

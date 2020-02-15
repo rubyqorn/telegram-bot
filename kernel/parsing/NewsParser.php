@@ -19,7 +19,7 @@ class NewsParser extends ContentParser
                 self::$pq = pq($value);
 
                 self::$parsedContent[$key] = [
-                    'link' => 'https://kod.ru/tag/news' . self::$pq->find(' > .box')->attr('href'),
+                    'link' => 'https://kod.ru/' . self::$pq->find(' > .box')->attr('href'),
                     'title' => self::$pq->find(' > .box >  .post-card-wrapper > .post-card-body > .post-card-title ')->text(),
                     'description' => self::$pq->find(' > .box >  .post-card-wrapper > .post-card-body > .post-card-excerpt ')->text()
                 ];

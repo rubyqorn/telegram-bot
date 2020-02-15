@@ -29,7 +29,6 @@ class ArticlesParser extends ContentParser
                 self::$parsedContent[$key] = [
                     'link' => self::$pq ->find(' > .article-link')->attr('href'),
                     'title' => self::$pq ->find(' > .post-text > .post-title > .entry-title')->text(),
-                    'description' => self::$pq->find(' > .post-text > .entry-container > .entry-content')->text()
                 ];
             }
 
@@ -37,5 +36,15 @@ class ArticlesParser extends ContentParser
 
         return self::$parsedContent;
 
+    }
+
+    /**
+     * Get parsed articles
+     * 
+     * @return array
+     */ 
+    public static function get()
+    {
+        return self::parse();
     }
 }
