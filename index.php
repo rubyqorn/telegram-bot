@@ -13,6 +13,10 @@ use Kernel\Commands\MemeCommandHandler;
 $updates = new GetUpdates();
 $content = $updates::getContent();
 
+if (empty($content)) {
+    return false;
+}
+
 $settings = require './config/settings.php';
 $commands = require './config/commands_list.php';
 require_once './config/keyboards.php';
@@ -85,7 +89,7 @@ switch($message) {
     case 'News':
         
         $news = new NewsCommandHandler($defaultServerOptions, $chat_id);
-        return $news::getContent();
+        return $news::push();
 
     break;
 

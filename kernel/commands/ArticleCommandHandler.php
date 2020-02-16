@@ -45,7 +45,7 @@ class ArticleCommandHandler extends Curl
         
         // Create article link  
         $articleLink = [
-            'link' => '<a href="'.$this->article['link'].'">'.$this->article['title'].'</a>'
+            'link' => $this->article
         ];
 
         // Convert array to json string 
@@ -78,7 +78,7 @@ class ArticleCommandHandler extends Curl
             
         ]);
 
-        return self::$parser::get();
+        return self::$parser->get();
     }
 
 }

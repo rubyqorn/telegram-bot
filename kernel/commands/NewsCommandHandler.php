@@ -60,7 +60,7 @@ class NewsCommandHandler extends Curl
 
         // Link which will be  
         $newsLink = [
-            'link' => '<a href="'. $this->newsItem['link'] .'">'. $this->newsItem['title'] .'</a>',
+            'link' => $this->newsItem,
         ];
         
         $reply = json_encode($newsLink);
@@ -87,7 +87,7 @@ class NewsCommandHandler extends Curl
             ]
         ]);
 
-        return  self::$parser::parse();
+        return  self::$parser->get();
         
     }
 }

@@ -4,6 +4,11 @@ namespace Kernel\Parsing;
 
 class NewsParser extends ContentParser
 {
+    /**
+     * @var array
+     */ 
+    protected static $news = [];
+
     public function __construct($url, $options)
     {
         parent::__construct($url, $options);
@@ -28,5 +33,22 @@ class NewsParser extends ContentParser
         \phpQuery::unloadDocuments();
 
         return self::$parsedContent;
+    }
+
+    /**
+     * Get parsed news
+     * 
+     * @return array
+     */ 
+    public function get()
+    {
+        $news = self::parse();
+
+        foreach($news as $key => $item) {
+            self::$news[$key] = '<a href="'. $item['link'] .'">'. $item['title'] .'</a>';
+        }
+
+        $this->redis()->mset(self::$news);
+        return $this->redis()->mget(array_keys(self::$news));
     }
 }

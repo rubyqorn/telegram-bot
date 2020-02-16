@@ -6,6 +6,11 @@ use Kernel\Debugger\Debug;
 
 class ArticlesParser extends ContentParser
 {
+    /**
+     * @var array
+     */ 
+    public static $articles = [];
+
     public function __construct(string $url, array $options)
     {
         parent::__construct($url, $options);
@@ -43,8 +48,15 @@ class ArticlesParser extends ContentParser
      * 
      * @return array
      */ 
-    public static function get()
+    public function get()
     {
-        return self::parse();
+        $content = self::parse();
+
+        foreach($content as $key => $article) {
+            self::$articles[$key] = '<a href="'. $article['link'] .'">'. $article['title'] .'</a>';
+        }
+
+        $this->redis()->mset(self::$articles);
+        return $this->redis()->mget(array_keys(self::$articles));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Kernel\Curl;
 
+use Kernel\Redis\RedisConnection;
+
 class Curl
 {
     /**
@@ -25,6 +27,11 @@ class Curl
      * @var string
      */ 
     protected static $jsonData;
+
+    /**
+     * @var \Kernel\Redis\RedisConnection
+     */ 
+    protected $redis = null;
 
     public function __construct(string $url, array $options)
     {
@@ -56,8 +63,12 @@ class Curl
         self::$jsonData = Executor::exec();
         ConnectionDestroyer::destroy();
 
-        self::$result = json_decode(self::$jsonData);
-        return array_pop(self::$result->result);
+        if (!empty(self::$jsonData)) {
+            self::$result = json_decode(self::$jsonData);
+            return array_pop(self::$result->result);
+        }
+
+        
     }
 
     /**
@@ -85,4 +96,21 @@ class Curl
         self::options();
         return Executor::exec();
     }
+
+    /**
+     * Set connection with redis server
+     * 
+     * @param string|int $database
+     * 
+     * @return \Predis\Client
+     */ 
+    public function redis($database = [])
+    {
+        return $this->redis = new RedisConnection([
+            'scheme' => 'tcp',
+            'host' => 'localhost',
+            'port' => '6379',
+            'database' => !empty($database) ? $database : '0'
+        ]);
+    }   
 }
